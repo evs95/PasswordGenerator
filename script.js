@@ -7,7 +7,10 @@ var lowerCaseCharSet = "abcdefghijklmnopqrstuvwxyz";
 var upperCaseCharSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 var numberSet = "0123456789";
 var specialCharSet = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
-var passwordCharSet = "";
+var includeUppercase = false;
+var includeLowercase = false;
+var includeNumericChar = false;
+var includeSpecialChar = false;
 
 // Write password to the #password input
 function writePassword() {
@@ -26,22 +29,45 @@ function generatePassword () {
 
   length = GetPasswordLength();
   if(length == ""){
-    AlertUser("Invalid password length entered.\nPassword length should be inbetween 8 to 128.\nPlease start again.");
+    AlertUser("Invalid password length entered.\nPassword length should be of at least 8 characters and no more than 128 characters.\nPlease start again.");
     return "";
   }
 
-  passwordCharSet = GetPasswordCharSet();
-  if(passwordCharSet == ""){
+  var isValid = isPasswordCriteriaValid();
+  if(!isValid){
       AlertUser("Atleast one password criteria should be included.\nPlease start again.");
     return "";
   }
 
   // Logic to generate password
-  for (var i = 0, n = passwordCharSet.length; i < length; ++i) {
-    password += passwordCharSet.charAt(Math.floor(Math.random() * n));
+  var passwordOutput = "";
+  var passwordCharSet = "";
+
+  // Add mandate criteria to password as per user selection.
+  // Generate passwordCharset for rest of the password.
+  if(includeUppercase){
+    passwordOutput += upperCaseCharSet.charAt(Math.floor(Math.random() * upperCaseCharSet.length));
+    passwordCharSet += upperCaseCharSet;
+  }
+  if(includeLowercase){
+    passwordOutput += lowerCaseCharSet.charAt(Math.floor(Math.random() * lowerCaseCharSet.length));
+    passwordCharSet += lowerCaseCharSet;
+  }
+  if(includeNumericChar){
+    passwordOutput += numberSet.charAt(Math.floor(Math.random() * numberSet.length));
+    passwordCharSet += numberSet;
+  }
+  if(includeSpecialChar){
+    passwordOutput += specialCharSet.charAt(Math.floor(Math.random() * specialCharSet.length));
+    passwordCharSet += specialCharSet;
   }
 
-  return password;
+  // Generate random sequence for rest of password
+  for (var i = passwordOutput.length, n = passwordCharSet.length; i < length; ++i) {
+    passwordOutput += passwordCharSet.charAt(Math.floor(Math.random() * n));
+  }
+
+  return passwordOutput;
 }
 
   // Ask user for password length
@@ -54,25 +80,13 @@ function generatePassword () {
   }
 
   // Ask user for password criteria and form charset for Password
-  function GetPasswordCharSet(){
-    var includeUppercase = ConfirmUser("Would you want to include Upper case charactor in Password?");
-    var includeLowercase = ConfirmUser("Would you want to include Lower case charactor in Password?");
-    var includeNumericChar = ConfirmUser("Would you want to include Numeric charactor in Password?");
-    var includeSpecialChar = ConfirmUser("Would you want to include Special charactor in Password?");
+  function isPasswordCriteriaValid(){
+    includeUppercase = ConfirmUser("Would you want to include Upper case charactor in Password?");
+    includeLowercase = ConfirmUser("Would you want to include Lower case charactor in Password?");
+    includeNumericChar = ConfirmUser("Would you want to include Numeric charactor in Password?");
+    includeSpecialChar = ConfirmUser("Would you want to include Special charactor in Password?");
 
-    if(includeUppercase){
-      passwordCharSet += upperCaseCharSet;
-    }
-    if(includeLowercase){
-      passwordCharSet += lowerCaseCharSet;
-    }
-    if(includeNumericChar){
-      passwordCharSet += numberSet;
-    }
-    if(includeSpecialChar){
-      passwordCharSet += specialCharSet;
-    }
-    return passwordCharSet;
+    return (includeUppercase || includeLowercase || includeNumericChar || includeSpecialChar);
   }
 
   // Alert user with msg
