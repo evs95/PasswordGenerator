@@ -2,7 +2,6 @@
 var generateBtn = document.querySelector("#generate");
 var password = "";
 var length = 0;
-var includeSpecialChars = "";
 var lowerCaseCharSet = "abcdefghijklmnopqrstuvwxyz";
 var upperCaseCharSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 var numberSet = "0123456789";
