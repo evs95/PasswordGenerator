@@ -24,4 +24,4 @@ The following image shows the web application's appearance and functionality:
 
 Below is link for deployed Password Generator website.
 
-[Password Generator](https://evs95.github.io/Portfolio/)
+[Password Generator](https://evs95.github.io/PasswordGenerator/)
